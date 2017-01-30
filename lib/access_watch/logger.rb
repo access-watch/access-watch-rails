@@ -3,7 +3,7 @@ module AccessWatch
     attr_reader :client
 
     def initialize(config)
-      @client = Client.new(config)
+      @client = AccessWatch::Client.new(config)
       @parameter_filter = ActionDispatch::Http::ParameterFilter.new(Rails.application.config.filter_parameters)
       ActiveSupport::Notifications.subscribe("process_action.action_controller", &method(:after_http_request))
     end
