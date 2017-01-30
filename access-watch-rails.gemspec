@@ -1,7 +1,7 @@
 # coding: utf-8
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "access_watch_rails"
+require "access_watch/rails_version"
 
 Gem::Specification.new do |spec|
   spec.name          = "access-watch-rails"
