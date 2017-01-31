@@ -4,13 +4,13 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "access_watch/rails_version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "access-watch-rails"
+  spec.name          = "access_watch_rails"
   spec.version       = AccessWatch::RAILS_VERSION
   spec.authors       = ["Alexis Bernard"]
   spec.email         = ["alexis@bernard.io"]
 
-  spec.summary       = "A Rails library to log and analyse HTTP requests using the Access Watch cloud service."
-  spec.description   = "A Rails library to log and analyse HTTP requests using the Access Watch cloud service."
+  spec.summary       = "A Rails library to log and analyse Rails HTTP requests using the Access Watch cloud service."
+  spec.description   = "A Rails library to log and analyse Rails HTTP requests using the Access Watch cloud service."
   spec.homepage      = "https://access.watch/"
   spec.license       = "MIT"
 
@@ -31,5 +31,5 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler", "~> 1.13"
   spec.add_development_dependency "rake", "~> 10.0"
-  spec.add_dependency "access-watch-ruby", ">= 0.0.1"
+  spec.add_dependency "access_watch", ">= 0.0.2"
 end
