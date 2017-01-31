@@ -18,7 +18,7 @@ module AccessWatch
           scheme: URI(request.original_url).scheme,
           host: request.host,
           port: request.port,
-          url: request.path,
+          url: request.original_fullpath,
           headers: extract_http_headers(request.headers)
         },
         response: {status: response.status},
