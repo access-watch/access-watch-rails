@@ -4,28 +4,38 @@ module AccessWatch
 
     def initialize(config)
       @client = AccessWatch::Client.new(config)
-      @parameter_filter = ActionDispatch::Http::ParameterFilter.new(Rails.application.config.filter_parameters)
-      ActiveSupport::Notifications.subscribe("process_action.action_controller", &method(:after_http_request))
     end
 
-    def after_http_request(name, start, finish, id, payload)
-      request = payload[:headers].instance_variable_get(:@req)
+    def record(request, response)
       post_request(
-        time: start,
+        time: Time.now.utc,
         address: request.remote_ip,
         host: request.host,
         request: {
           # TODO: Check if is SERVER_PROTOCOL comes from client browser
           # "protocol": "HTTP/1.1",
-          method: payload[:method],
+          method: request.method,
           scheme: URI(request.original_url).scheme,
           host: request.host,
           port: request.port,
-          url: payload[:path],
-          headers: extract_headers(payload)
+          url: request.path,
+          headers: extract_http_headers(request.headers)
         },
-        response: {status: payload[:status]},
+        response: {status: response.status},
       )
+    end
+
+    def extract_http_headers(headers)
+      headers.reduce({}) do |hash, (name, value)|
+        if name.index("HTTP_") == 0 && name != "HTTP_COOKIE"
+          hash[format_header_name(name)] = value
+        end
+        hash
+      end
+    end
+
+    def format_header_name(name)
+      name.sub(/^HTTP_/, '').sub("_", " ").titleize.sub(" ", "-")
     end
 
     #######################
@@ -40,18 +50,6 @@ module AccessWatch
 
     def post_async(path, data)
       Thread.new { client.post(path, data) }
-    end
-
-    def filter_sensitive_data(hash)
-      @parameter_filter ? @parameter_filter.filter(hash) : hash
-    end
-
-    def filter_environment_variables(hash)
-      hash.clone.keep_if { |key,value| key == key.upcase }
-    end
-
-    def extract_headers(payload)
-      filter_sensitive_data(filter_environment_variables(payload[:headers].env))
     end
   end
 end
