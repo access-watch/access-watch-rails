@@ -14,12 +14,20 @@ You will need an API key.
 
 To get an API key, send us an email at api@access.watch and we will come back to you.
 
-Then add the following `after_action` callback in your `ApplicationController`.
+Then create the following file `config/access_watch.yml` and restart/deploy your app.
+
+```yaml
+development:
+  api_key: API_KEY
+
+production:
+  api_key: API_KEY
+```
+
+Or if you prefere add the following line in `config/application.rb` and restart/deploy your app.
 
 ```ruby
-class ApplicationController < ActionController::Base
-  after_action { AccessWatch::Logger.new(api_key: API_KEY).record(request, response) }
-end
+config.middleware.use "AccessWatch::RackLogger", api_key: API_KEY
 ```
 
 API documentation is here: https://access.watch/api-documentation/#request-logging
