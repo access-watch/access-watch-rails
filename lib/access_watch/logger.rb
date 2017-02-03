@@ -10,7 +10,6 @@ module AccessWatch
       post_request(
         time: Time.now.utc,
         address: request.remote_ip,
-        host: request.host,
         request: {
           protocol: request.headers["Version"],
           method: request.method,
