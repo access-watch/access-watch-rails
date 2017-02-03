@@ -12,8 +12,7 @@ module AccessWatch
         address: request.remote_ip,
         host: request.host,
         request: {
-          # TODO: Check if is SERVER_PROTOCOL comes from client browser
-          # "protocol": "HTTP/1.1",
+          protocol: request.headers["Version"],
           method: request.method,
           scheme: URI(request.original_url).scheme,
           host: request.host,
