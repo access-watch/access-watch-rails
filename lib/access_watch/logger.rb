@@ -21,6 +21,7 @@ module AccessWatch
           headers: extract_http_headers(request.headers)
         },
         response: {status: response.status},
+        memory_usage: memory_usage_in_bytes
       )
     end
 
@@ -49,6 +50,28 @@ module AccessWatch
 
     def post_async(path, data)
       Thread.new { client.post(path, data) }
+    end
+
+    def memory_usage_in_bytes
+      linux_process_memory_usage_in_bytes(Process.pid)
+    end
+
+    def linux_process_status(pid)
+      path = "/proc/#{pid}/status"
+      return unless File.readable?(path)
+      File.read(path).split("\n").reduce({}) do |hash, line|
+        name, value = line.split(":")
+        hash[name] = value.strip
+        hash
+      end
+    end
+
+    MEMORY_CONVERSIONS = {"kb" => 1024, "mb" => 1024 * 1024, "gb" => 1024 * 1024 * 1024}
+
+    def linux_process_memory_usage_in_bytes(pid)
+      return unless status = linux_process_status(pid)
+      value, unit = status["VmRSS"].split
+      value.to_i * MEMORY_CONVERSIONS[unit.downcase]
     end
   end
 end
