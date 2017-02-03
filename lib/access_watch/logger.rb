@@ -21,7 +21,7 @@ module AccessWatch
           headers: extract_http_headers(request.headers)
         },
         response: {status: response.status},
-        memory_usage: memory_usage_in_bytes
+        context: {memory_usage: memory_usage_in_bytes},
       )
     end
 
