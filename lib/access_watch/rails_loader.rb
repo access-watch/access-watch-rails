@@ -5,7 +5,7 @@ module AccessWacth
       Rails::Railtie.initializer "access_watch.detect_config_file" do
         if (path = Rails.root.join("config/access_watch.yml")).exist?
           if config = AccessWacth::RailsLoader.load_config_file(path)[Rails.env]
-            Rails.application.config.middleware.use("AccessWatch::RackLogger", config.symbolize_keys)
+            Rails.application.config.middleware.use(AccessWatch::RackLogger, config.symbolize_keys)
           end
         end
       end
