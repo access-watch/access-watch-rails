@@ -8,5 +8,5 @@ require "access_watch/rails_version"
 
 if defined?(Rails)
   require "access_watch/rails_loader"
-  AccessWacth::RailsLoader.start
+  AccessWacth::RailsLoader.start_on_rails_initialization
 end
