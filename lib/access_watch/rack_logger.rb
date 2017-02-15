@@ -50,7 +50,7 @@ module AccessWatch
     end
 
     def format_header_name(name)
-      name.sub(/^HTTP_/, '').sub("_", " ").titleize.sub(" ", "-")
+      name.sub(/^HTTP_/, '').gsub("_", " ").titleize.gsub(" ", "-")
     end
 
     def post_request(data)
